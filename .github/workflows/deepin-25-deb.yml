@@ -71,7 +71,7 @@ jobs:
 
       - name: Build DEB package
         working-directory: app/main
-        run: pnpm build
+        run: pnpm tauri build --bundles deb
 
       - name: Validate package
         shell: bash

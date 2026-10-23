@@ -17,14 +17,14 @@ const pluralize = (n: number, s: string) => n === 1 ? s : `${s}s`;
 <template>
 	<div class="w-72 p-3" v-if="props.vm.outboundPayload === undefined">
 		<p class="mt-4 mb-2 pt-3 px-3">
-			Visibility state
+			{{ $t('labels.visibilityState') }}
 		</p>
 		<h4
 			tabindex="0" role="button" class="btn font-medium flex flex-row !justify-between w-full
             items-center rounded-xl active:scale-95 transition duration-150 ease-in-out p-3" @click="emits('invertVisibility')">
-			<span v-if="props.vm.visibility === 'Visible'">Always visible</span>
-			<span v-else-if="props.vm.visibility === 'Invisible'">Hidden from everyone</span>
-			<span v-else>Temporarily visible</span>
+			<span v-if="props.vm.visibility === 'Visible'">{{ $t('labels.alwaysVisible') }}</span>
+			<span v-else-if="props.vm.visibility === 'Invisible'">{{ $t('labels.alwaysHidden') }}</span>
+			<span v-else>{{ $t('labels.tempVisible') }}</span>
 
 			<svg
 				xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
@@ -34,26 +34,23 @@ const pluralize = (n: number, s: string) => n === 1 ? s : `${s}s`;
 		</h4>
 		<p class="text-xs mt-2 pb-3 px-3">
 			<span v-if="props.vm.visibility === 'Visible'">
-				Nearby devices can share files with you, but you'll always be
-				notified and have to approve each transfer before receiving it.
+				{{ $t('info.alwaysVisibleDetails') }}
 			</span>
 			<span v-else-if="props.vm.visibility === 'Invisible'">
-				No one can see your device at the moment. However, keep in mind that if another
-				device has saved yours before, it might still attempt to start a transfer with you.
+				{{ $t('info.alwaysHiddenDetail0') }}
 				<br>
 				<br>
-				You will get a notification when someone nearby is sharing
-				giving you the ability to become visible for 1 minute.
+				{{ $t('info.alwaysHiddenDetail1') }}
 			</span>
 			<span v-else>
-				You are temporarily visible to everyone.
+				{{ $t('info.tempVisibleDetail') }}
 			</span>
 		</p>
 	</div>
 	<div class="w-72 p-6 flex flex-col justify-between" v-else>
 		<div>
 			<p class="mt-4 mb-2">
-				Sharing {{ props.vm.outboundPayload.Files.length }} {{ pluralize(props.vm.outboundPayload.Files.length, "file") }}
+				{{ $t('info.fileInSharing', props.vm.outboundPayload.Files.length) }}
 			</p>
 			<div class="bg-white w-32 h-32 rounded-2xl mb-2 flex justify-center items-center">
 				<svg
@@ -68,8 +65,7 @@ const pluralize = (n: number, s: string) => n === 1 ? s : `${s}s`;
 			</p>
 
 			<p class="text-xs mt-3">
-				Make sure both devices are unlocked, close together, and have bluetooth turned on. Device you're sharing with need
-				Quick Share turned on and visible to you.
+				{{ $t('info.connectivityWarning') }}
 			</p>
 		</div>
 

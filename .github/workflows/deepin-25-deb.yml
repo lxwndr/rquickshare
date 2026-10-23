@@ -51,7 +51,9 @@ jobs:
           version: 9.7.0
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@nightly-2025-01-15
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly-2025-01-15
 
       - name: Show build environment
         run: |

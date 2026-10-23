@@ -2,6 +2,7 @@ import { devtools } from '@vue/devtools'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { i18n } from './i18n'
+import './theme'
 
 import './vue_lib/assets/main.postcss'
 

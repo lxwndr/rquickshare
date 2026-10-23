@@ -1,7 +1,35 @@
 import { createI18n } from "vue-i18n"
 
+const supportedLocales = ['en', 'pt-BR', 'fr', 'de', 'it', 'es'] as const
+type SupportedLocale = typeof supportedLocales[number]
+
+function detectSystemLocale(): SupportedLocale {
+  if (typeof navigator === 'undefined') {
+    return 'en'
+  }
+
+  const preferredLocales = navigator.languages?.length
+    ? navigator.languages
+    : [navigator.language]
+
+  for (const preferredLocale of preferredLocales) {
+    const normalizedLocale = preferredLocale.toLowerCase()
+
+    if (normalizedLocale === 'pt-br' || normalizedLocale.startsWith('pt-')) {
+      return 'pt-BR'
+    }
+
+    const language = normalizedLocale.split('-')[0]
+    if (supportedLocales.includes(language as SupportedLocale)) {
+      return language as SupportedLocale
+    }
+  }
+
+  return 'en'
+}
+
 export const i18n = createI18n({
-  locale: 'pt-BR',
+  locale: detectSystemLocale(),
   fallbackLocale: 'en',
   messages: {
     en: {

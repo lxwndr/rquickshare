@@ -54,7 +54,12 @@ function changeLocale(locale: string): void {
 				<!-- português brasileiro -->
 				<div class="form-control hover:bg-gray-500 hover:bg-opacity-10 rounded-xl p-3 justify-center"
 					:class="i18nLocale.locale.value === 'pt-BR' ? 'border-2' : ''" @click="changeLocale('pt-BR')">
-					<span class="flex mx-auto justify-center text-3xl">🇧🇷</span>
+					<svg class="flex mx-auto" viewBox="0 0 36 36" aria-label="Brazilian flag" role="img">
+						<path fill="#009B3A" d="M4 5h28a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4z"></path>
+						<path fill="#FFDF00" d="M18 8 30 18 18 28 6 18z"></path>
+						<circle fill="#002776" cx="18" cy="18" r="6.2"></circle>
+						<path fill="#FFFFFF" d="M12.4 15.2a10.8 10.8 0 0 1 11.1 2.2c.2.3.4.7.5 1.1a10.8 10.8 0 0 0-11.6-1.8z"></path>
+					</svg>
 					<span class="flex mx-auto justify-center">Português (Brasil)</span>
 				</div>
 				<!-- french -->

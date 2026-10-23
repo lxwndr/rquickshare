@@ -71,7 +71,7 @@ const emits = defineEmits(['invertVisibility', 'clearSending']);
 		<p
 			@click="emits('clearSending')"
 			class="btn px-3 rounded-xl active:scale-95 transition duration-150 ease-in-out w-fit">
-			Cancel
+			{{ $t('buttons.cancel') }}
 		</p>
 	</div>
 </template>

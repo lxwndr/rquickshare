@@ -3,6 +3,7 @@ import { utils } from '../vue_lib';
 import { PropType } from 'vue';
 import { TauriVM } from '../vue_lib/helper/ParamsHelper';
 import { useI18n } from "vue-i18n";
+import { setThemePreference, themePreference, ThemePreference } from "../theme";
 
 const { t } = useI18n({ useScope: "global" });
 
@@ -14,6 +15,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
+
+function changeTheme(event: Event) {
+	setThemePreference((event.target as HTMLSelectElement).value as ThemePreference);
+}
 
 function openDownloadPicker() {
 	props.vm.dialogOpen({
@@ -33,7 +38,7 @@ function openDownloadPicker() {
 <template>
 	<div v-if="vm.settingsOpen"
 		class="absolute z-10 w-full h-full flex justify-center items-center bg-black bg-opacity-25">
-		<div class="bg-white rounded-xl shadow-xl p-4 w-[24rem]">
+		<div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl shadow-xl p-4 w-[24rem]">
 			<div class="flex flex-row justify-between items-center">
 				<h3 class="font-medium text-xl">
 					{{ $t('titles.settings') }}
@@ -44,10 +49,19 @@ function openDownloadPicker() {
 				</div>
 			</div>
 			<div class="py-4 flex flex-col">
+				<div class="form-control rounded-xl p-3">
+					<label for="theme-preference" class="label-text text-gray-900 dark:text-gray-100 mb-2">{{ $t('labels.theme') }}</label>
+					<select id="theme-preference" :value="themePreference" @change="changeTheme"
+						class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 focus:outline-none">
+						<option value="system">{{ $t('labels.themeSystem') }}</option>
+						<option value="light">{{ $t('labels.themeLight') }}</option>
+						<option value="dark">{{ $t('labels.themeDark') }}</option>
+					</select>
+				</div>
 				<div class="form-control hover:bg-gray-500 hover:bg-opacity-10 rounded-xl p-3">
 					<label class="cursor-pointer flex flex-row justify-between items-center"
 						@click="utils.setAutoStart(vm, !vm.autostart)">
-						<span class="label-text">{{ $t('labels.startOnBoot') }}</span>
+						<span class="label-text text-gray-900 dark:text-gray-100">{{ $t('labels.startOnBoot') }}</span>
 						<input type="checkbox" :checked="vm.autostart" class="checkbox focus:outline-none">
 					</label>
 				</div>
@@ -68,7 +82,7 @@ function openDownloadPicker() {
 				<div class="form-control hover:bg-gray-500 hover:bg-opacity-10 rounded-xl p-3">
 					<label class="cursor-pointer flex flex-col items-start" @click="openDownloadPicker()">
 						<span class="">{{ $t('labels.selectDownloadFolder') }}</span>
-						<span class="overflow-hidden whitespace-nowrap text-ellipsis text-xs max-w-80">
+						<span class="overflow-hidden whitespace-nowrap text-ellipsis text-xs max-w-80 text-gray-600 dark:text-gray-300">
 							> {{ vm.downloadPath ?? $t('labels.usersFolder') }}
 						</span>
 					</label>

@@ -3,7 +3,8 @@ import { utils } from '../vue_lib';
 import { PropType } from 'vue';
 import { TauriVM } from '../vue_lib/helper/ParamsHelper';
 import { useI18n } from "vue-i18n";
-import { setThemePreference, themePreference, ThemePreference } from "../theme";
+import { setThemePreference, themePreference } from "../theme";
+import type { ThemePreference } from "../theme";
 
 const { t } = useI18n({ useScope: "global" });
 

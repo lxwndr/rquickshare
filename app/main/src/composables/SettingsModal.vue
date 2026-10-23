@@ -6,7 +6,8 @@ import { useI18n } from "vue-i18n";
 import { setThemePreference, themePreference } from "../theme";
 import type { ThemePreference } from "../theme";
 
-const { t } = useI18n({ useScope: "global" });
+const i18n = useI18n({ useScope: "global" });
+const { t } = i18n;
 
 const props = defineProps({
 	vm: {
@@ -16,6 +17,12 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
+
+function changeLanguage(event: Event) {
+	const locale = (event.target as HTMLSelectElement).value;
+	i18n.locale.value = locale;
+	localStorage.setItem("rquickshare-locale", locale);
+}
 
 function changeTheme(event: Event) {
 	setThemePreference((event.target as HTMLSelectElement).value as ThemePreference);
@@ -50,6 +57,18 @@ function openDownloadPicker() {
 				</div>
 			</div>
 			<div class="py-4 flex flex-col">
+				<div class="form-control rounded-xl p-3">
+					<label for="language-preference" class="label-text text-gray-900 dark:text-gray-100 mb-2">{{ $t('titles.language') }}</label>
+					<select id="language-preference" :value="i18n.locale.value" @change="changeLanguage"
+						class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 focus:outline-none">
+						<option value="en">Inglês</option>
+						<option value="pt-BR">Português (Brasil)</option>
+						<option value="fr">Francês</option>
+						<option value="de">Alemão</option>
+						<option value="it">Italiano</option>
+						<option value="es">Espanhol</option>
+					</select>
+				</div>
 				<div class="form-control rounded-xl p-3">
 					<label for="theme-preference" class="label-text text-gray-900 dark:text-gray-100 mb-2">{{ $t('labels.theme') }}</label>
 					<select id="theme-preference" :value="themePreference" @change="changeTheme"

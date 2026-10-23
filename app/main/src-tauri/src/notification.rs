@@ -14,11 +14,28 @@ use tauri_plugin_notification::NotificationExt;
 #[cfg(target_os = "linux")]
 use crate::cmds;
 
+fn is_portuguese() -> bool {
+    std::env::var("LANG")
+        .or_else(|_| std::env::var("LANGUAGE"))
+        .map(|locale| {
+            let locale = locale.to_ascii_lowercase();
+            locale.starts_with("pt_br") || locale.starts_with("pt-br") || locale.starts_with("pt_") || locale.starts_with("pt-")
+        })
+        .unwrap_or(false)
+}
+
 pub fn send_request_notification(name: String, id: String, app_handle: &AppHandle) {
     // Is not used in macos, get rid of warning
     let _ = id;
 
-    let body = format!("{name} want to initiate a transfer");
+    let body = if is_portuguese() {
+        format!("{name} quer iniciar uma transferência")
+    } else {
+        format!("{name} wants to initiate a transfer")
+    };
+
+    let accept_label = if is_portuguese() { "Aceitar" } else { "Accept" };
+    let reject_label = if is_portuguese() { "Recusar" } else { "Reject" };
 
     #[cfg(not(target_os = "linux"))]
     let _ = app_handle
@@ -32,8 +49,8 @@ pub fn send_request_notification(name: String, id: String, app_handle: &AppHandl
     match Notification::new()
         .summary("RQuickShare")
         .body(&body)
-        .action("accept", "Accept")
-        .action("reject", "Reject")
+        .action("accept", accept_label)
+        .action("reject", reject_label)
         .show()
     {
         Ok(n) => {
@@ -75,7 +92,19 @@ pub fn send_request_notification(name: String, id: String, app_handle: &AppHandl
 }
 
 pub fn send_temporarily_notification(app_handle: &AppHandle) {
-    let body = "RQuickShare is temporarily hidden".to_string();
+    let (body, visible_label, ignore_label) = if is_portuguese() {
+        (
+            "O RQuickShare está temporariamente oculto".to_string(),
+            "Ficar visível (1 min)",
+            "Ignorar",
+        )
+    } else {
+        (
+            "RQuickShare is temporarily hidden".to_string(),
+            "Be visible (1m)",
+            "Ignore",
+        )
+    };
 
     #[cfg(not(target_os = "linux"))]
     let _ = app_handle
@@ -89,8 +118,8 @@ pub fn send_temporarily_notification(app_handle: &AppHandle) {
     match Notification::new()
         .summary("RQuickShare")
         .body(&body)
-        .action("visible", "Be visible (1m)")
-        .action("ignore", "Ignore")
+        .action("visible", visible_label)
+        .action("ignore", ignore_label)
         .id(1919)
         .show()
     {

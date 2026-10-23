@@ -15,7 +15,7 @@ function detectSystemLocale(): SupportedLocale {
   for (const preferredLocale of preferredLocales) {
     const normalizedLocale = preferredLocale.toLowerCase()
 
-    if (normalizedLocale === 'pt-br' || normalizedLocale.startsWith('pt-')) {
+    if (normalizedLocale === 'pt' || normalizedLocale.startsWith('pt-')) {
       return 'pt-BR'
     }
 

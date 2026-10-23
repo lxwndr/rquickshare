@@ -1,0 +1,90 @@
+name: Build Deepin 25 DEB
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-deepin-25-deb:
+    runs-on: ubuntu-latest
+    container:
+      image: linuxdeepin/deepin:crimson
+      options: --user root
+
+    steps:
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            build-essential \
+            ca-certificates \
+            curl \
+            file \
+            git \
+            libayatana-appindicator3-dev \
+            libdbus-1-dev \
+            libgtk-3-dev \
+            libssl-dev \
+            librsvg2-dev \
+            libwebkit2gtk-4.1-dev \
+            patchelf \
+            pkg-config \
+            protobuf-compiler
+
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.7.0
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Show build environment
+        run: |
+          cat /etc/os-release
+          node --version
+          pnpm --version
+          rustc --version
+          cargo --version
+          ldd --version | head -n 1
+
+      - name: Install frontend dependencies
+        working-directory: app/main
+        run: pnpm install --frozen-lockfile
+
+      - name: Build DEB package
+        working-directory: app/main
+        run: pnpm build
+
+      - name: Validate package
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          packages=(app/main/src-tauri/target/release/bundle/deb/*.deb)
+          if [ ${#packages[@]} -eq 0 ]; then
+            echo "No DEB package was produced."
+            find app/main/src-tauri/target/release/bundle -maxdepth 3 -type f -print || true
+            exit 1
+          fi
+          for package in "${packages[@]}"; do
+            dpkg-deb --info "$package"
+            file "$package"
+          done
+
+      - name: Upload DEB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rquickshare-deepin-25-deb
+          path: app/main/src-tauri/target/release/bundle/deb/*.deb
+          if-no-files-found: error
+          retention-days: 14

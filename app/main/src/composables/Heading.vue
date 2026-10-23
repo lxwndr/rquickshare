@@ -31,7 +31,7 @@ const emit = defineEmits(["openSettings", "openLanguage"]);
           vm.new_version &&
           openUrl('https://github.com/Martichou/rquickshare/releases/latest')
           ">
-        <span v-if="vm.new_version">{{ $t('label.updateAvailable') }}</span>
+        <span v-if="vm.new_version">{{ $t('labels.updateAvailable') }}</span>
         <p>v{{ vm.version }}</p>
         <p v-if="vm.new_version" class="text-lg">→</p>
         <p v-if="vm.new_version">v{{ vm.new_version }}</p>

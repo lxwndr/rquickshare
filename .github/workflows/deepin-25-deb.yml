@@ -15,6 +15,8 @@ jobs:
     container:
       image: linuxdeepin/deepin:crimson
       options: --user root
+    env:
+      RUSTUP_TOOLCHAIN: nightly-2025-01-15
 
     steps:
       - name: Install system dependencies
@@ -49,7 +51,7 @@ jobs:
           version: 9.7.0
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@nightly-2025-01-15
 
       - name: Show build environment
         run: |

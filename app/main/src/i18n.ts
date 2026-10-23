@@ -31,6 +31,10 @@ export const i18n = createI18n({
         startOnBoot: 'Start on boot',
         runningOnClose: 'Keep running on close',
         startMinimized: 'Start minimized',
+        theme: 'Appearance',
+        themeSystem: 'Follow system',
+        themeLight: 'Light',
+        themeDark: 'Dark',
         selectDownloadFolder: 'Change download folder',
         usersFolder: 'OS User\'s download folder',
         visibilityState: 'Visibility state',
@@ -69,7 +73,7 @@ export const i18n = createI18n({
       labels: {
         deviceName: 'Nome do dispositivo', updateAvailable: 'Atualização disponível', savedTo: 'Salvo em', received: 'Recebido', text: 'texto',
         selectFileDestination: 'Selecione a pasta de destino dos arquivos', startOnBoot: 'Iniciar com o sistema',
-        runningOnClose: 'Continuar em execução ao fechar', startMinimized: 'Iniciar minimizado',
+        runningOnClose: 'Continuar em execução ao fechar', startMinimized: 'Iniciar minimizado', theme: 'Aparência', themeSystem: 'Seguir o sistema', themeLight: 'Claro', themeDark: 'Escuro',
         selectDownloadFolder: 'Alterar pasta de downloads', usersFolder: 'Pasta de downloads do usuário',
         visibilityState: 'Estado de visibilidade', alwaysVisible: 'Sempre visível',
         alwaysHidden: 'Oculto para todos', tempVisible: 'Visível temporariamente'

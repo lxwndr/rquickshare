@@ -62,6 +62,64 @@ export const i18n = createI18n({
         connectivityWarning: 'Make sure both devices are unlocked, close together, and have bluetooth turned on. Device you\'re sharing with need Quick Share turned on and visible to you.'
       }
     },
+    'pt-BR': {
+      titles: {
+        language: 'Idioma',
+        uploader: 'Selecione um arquivo para enviar',
+        settings: 'Configurações'
+      },
+      buttons: {
+        close: 'Fechar',
+        cancel: 'Cancelar',
+        accept: 'Aceitar',
+        decline: 'Recusar',
+        open: 'Abrir',
+        copy: 'Copiar',
+        clear: 'Limpar',
+        select: 'Selecionar'
+      },
+      labels: {
+        deviceName: 'Nome do dispositivo',
+        updateAvailable: 'Atualização disponível',
+        savedTo: 'Salvo em',
+        received: 'Recebido',
+        text: 'texto',
+        selectFileDestination: 'Selecione a pasta de destino dos arquivos',
+        startOnBoot: 'Iniciar com o sistema',
+        runningOnClose: 'Continuar em execução ao fechar',
+        startMinimized: 'Iniciar minimizado',
+        selectDownloadFolder: 'Alterar pasta de downloads',
+        usersFolder: 'Pasta de downloads do usuário do sistema',
+        visibilityState: 'Visibilidade do dispositivo',
+        alwaysVisible: 'Sempre visível',
+        alwaysHidden: 'Oculto para todos',
+        tempVisible: 'Visível temporariamente'
+      },
+      info: {
+        sending: 'Enviando...',
+        receiving: 'Recebendo...',
+        transferCancelled: 'Transferência cancelada',
+        transferRejected: 'Transferência recusada',
+        unexpectedDisconnection: 'Desconexão inesperada',
+        readyToReceive: 'Pronto para receber',
+        readyToReceiveSend: 'Pronto para receber e enviar',
+        nearbyDevices: 'Dispositivos próximos',
+        dropFilesToSend: 'Solte os arquivos aqui para enviar',
+        copiedToClipboard: 'Copiado para a área de transferência',
+        copyToClipboardError_unknown: 'Erro desconhecido ao copiar o texto',
+        copyToClipboardError: 'Erro ao copiar o texto',
+        openingURLError_invalid: 'Erro ao abrir o endereço: ele pode ser inválido',
+        openingURLError: 'Erro ao abrir o endereço',
+        sharingFilesGeneric: 'Deseja compartilhar alguns arquivos.',
+        sharingFilesDetail: 'Deseja compartilhar ',
+        fileInSharing: 'Compartilhando {n} arquivo | Compartilhando {n} arquivos',
+        alwaysVisibleDetails: 'Dispositivos próximos podem compartilhar arquivos com você, mas você sempre receberá uma notificação e precisará aprovar cada transferência antes de receber os arquivos.',
+        alwaysHiddenDetail0: 'No momento, ninguém pode ver seu dispositivo. Porém, se outro dispositivo já o salvou anteriormente, ele ainda poderá tentar iniciar uma transferência com você.',
+        alwaysHiddenDetail1: 'Você receberá uma notificação quando alguém próximo quiser compartilhar arquivos, com a opção de deixar seu dispositivo visível por 1 minuto.',
+        tempVisibleDetail: 'Seu dispositivo está temporariamente visível para todos.',
+        connectivityWarning: 'Verifique se os dois dispositivos estão desbloqueados, próximos um do outro e com o Bluetooth ativado. O dispositivo com o qual você está compartilhando precisa estar com o Quick Share ativado e visível para você.'
+      }
+    },
     fr: {
       titles: {
         language: 'Langue',

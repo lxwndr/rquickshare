@@ -220,3 +220,58 @@ body,
 .error circle.bg, .error circle.fg {
     @apply !stroke-red-400
 }
+
+/* Application dark theme */
+.dark body,
+.dark #app {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+.dark .bg-white {
+    background-color: #1f2937 !important;
+}
+
+.dark .bg-green-50 {
+    background-color: #111827 !important;
+}
+
+.dark .bg-green-100 {
+    background-color: #273449 !important;
+}
+
+.dark .text-black,
+.dark .text-gray-900 {
+    color: #f3f4f6 !important;
+}
+
+.dark .text-gray-800 {
+    color: #e5e7eb !important;
+}
+
+.dark .text-gray-700,
+.dark .text-gray-600 {
+    color: #d1d5db !important;
+}
+
+.dark .border-gray-300 {
+    border-color: #4b5563 !important;
+}
+
+.dark .hover\\:bg-gray-500:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .checkbox {
+    border-color: #6b7280;
+    --chkbg: #374151;
+    --chkfg: #f9fafb;
+}
+
+.dark .checkbox:checked,
+.dark .checkbox[checked=true],
+.dark .checkbox[aria-checked=true] {
+    background-color: #166534;
+    border-color: #166534;
+    background-image: linear-gradient(-45deg, transparent 65%, #166534 65.99%), linear-gradient(45deg, transparent 75%, #166534 75.99%), linear-gradient(-45deg, #166534 40%, transparent 40.99%), linear-gradient(45deg, #166534 30%, #f9fafb 30.99%, #f9fafb 40%, transparent 40.99%), linear-gradient(-45deg, #f9fafb 50%, #166534 50.99%);
+}

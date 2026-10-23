@@ -1,6 +1,9 @@
 name: Build Deepin 25 DEB
 
 on:
+  push:
+    branches:
+      - ci/deepin-25-deb-build
   workflow_dispatch:
 
 permissions:

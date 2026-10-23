@@ -50,6 +50,7 @@ jobs:
 
       - name: Show build environment
         run: |
+          git config --global --add safe.directory '*'
           cat /etc/os-release
           node --version
           pnpm --version

@@ -2,10 +2,8 @@
 	<div class="flex flex-col w-full h-full bg-green-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 max-w-full max-h-full overflow-hidden">
 		<ToastNotification />
 		<SettingsModal :vm="vm" @close="settingsOpen = false" />
-		<LanguageModal :vm="vm" @close="languageOpen = false" />
 
-		<Heading :vm="vm" :open-url="openUrl" @open-settings="settingsOpen = true"
-			@open-language="languageOpen = true" />
+		<Heading :vm="vm" :open-url="openUrl" @open-settings="settingsOpen = true" />
 
 		<div class="flex-1 flex flex-row">
 			<SideMenu :vm="vm" @invert-visibility="invertVisibility(vm)" @clear-sending="clearSending(vm)" />
@@ -167,7 +165,6 @@ import { Visibility } from '@martichou/core_lib/bindings/Visibility';
 import { ToastNotification, ToDelete, stateToDisplay, autostartKey, DisplayedItem, useToastStore, opt, ToastType, utils } from '../vue_lib';
 
 import SettingsModal from '../composables/SettingsModal.vue';
-import LanguageModal from '../composables/LanguageModal.vue';
 import Heading from '../composables/Heading.vue';
 import SideMenu from '../composables/SideMenu.vue';
 import ContentStatus from '../composables/ContentStatus.vue';
@@ -180,7 +177,6 @@ export default {
 	components: {
 		ToastNotification,
 		SettingsModal,
-		LanguageModal,
 		Heading,
 		SideMenu,
 		ContentStatus,
@@ -233,7 +229,6 @@ export default {
 			hostname: ref<string>(),
 
 			settingsOpen: ref<boolean>(false),
-			languageOpen: ref<boolean>(false),
 
 			new_version: opt<string>(),
 		};

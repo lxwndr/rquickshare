@@ -11,7 +11,6 @@ const props = defineProps({
 
 const emits = defineEmits(['invertVisibility', 'clearSending']);
 
-const pluralize = (n: number, s: string) => n === 1 ? s : `${s}s`;
 </script>
 
 <template>

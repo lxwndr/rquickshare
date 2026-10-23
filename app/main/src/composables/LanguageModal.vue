@@ -49,7 +49,7 @@ function changeLocale(locale: string): void {
 						</path>
 						<path fill="#CF1B2B" d="M21 15V5h-6v10H0v6h15v10h6V21h15v-6z"></path>
 					</svg>
-					<span class="flex mx-auto justify-center">English</span>
+					<span class="flex mx-auto justify-center">Inglês</span>
 				</div>
 				<!-- português brasileiro -->
 				<div class="form-control hover:bg-gray-500 hover:bg-opacity-10 rounded-xl p-3 justify-center"
@@ -70,7 +70,7 @@ function changeLocale(locale: string): void {
 						<path fill="#002495" d="M4 5a4 4 0 0 0-4 4v18a4 4 0 0 0 4 4h8V5H4z"></path>
 						<path fill="#EEE" d="M12 5h12v26H12z"></path>
 					</svg>
-					<span class="flex mx-auto justify-center">Français</span>
+					<span class="flex mx-auto justify-center">Francês</span>
 				</div>
 				<!-- german -->
 				<div class="form-control hover:bg-gray-500 hover:bg-opacity-10 rounded-xl p-3" 
@@ -80,7 +80,7 @@ function changeLocale(locale: string): void {
 						<path fill="#ED1F24" d="M0 14h36v9H0z"></path>
 						<path fill="#141414" d="M32 5H4a4 4 0 0 0-4 4v5h36V9a4 4 0 0 0-4-4z"></path>
 					</svg>
-					<span class="flex mx-auto justify-center">Deutsch</span>
+					<span class="flex mx-auto justify-center">Alemão</span>
 				</div>
 				<!-- italian -->
 				<div class="form-control hover:bg-gray-500 hover:bg-opacity-10 rounded-xl p-3" 
@@ -108,7 +108,7 @@ function changeLocale(locale: string): void {
 						<path fill="#99AAB5" d="M7 16h1v7H7zm9 0h1v7h-1z"></path>
 						<path fill="#66757F" d="M6 22h3v1H6zm9 0h3v1h-3zm-8-7h1v1H7zm9 0h1v1h-1z"></path>
 					</svg>
-					<span class="flex mx-auto justify-center">Español</span>
+					<span class="flex mx-auto justify-center">Espanhol</span>
 				</div>
 			</div>
 		</div>

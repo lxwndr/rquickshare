@@ -55,9 +55,22 @@ async fn main() -> Result<(), anyhow::Error> {
             None,
         ))
         .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
+        .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
             trace!("tauri_plugin_single_instance: instance already running");
             open_main_window(app);
+
+            // Forward local paths passed by the file manager to the running instance.
+            let files: Vec<String> = argv
+                .iter()
+                .skip(1)
+                .filter(|arg| std::path::Path::new(arg).exists())
+                .cloned()
+                .collect();
+            if !files.is_empty() {
+                if let Err(error) = app.emit("send-files-requested", files) {
+                    error!("Could not forward file-manager selection: {error}");
+                }
+            }
         }))
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
@@ -69,6 +82,7 @@ async fn main() -> Result<(), anyhow::Error> {
             cmds::get_hostname,
             cmds::send_payload,
             cmds::send_to_rs,
+            cmds::get_cli_files,
         ])
         .setup(|app| {
             // Setting up logging inside file for the app

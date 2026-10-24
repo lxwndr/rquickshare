@@ -48,7 +48,7 @@ function openFilePicker() {
 <template>
 	<h3 class="mb-4 font-medium text-xl">
 		<span v-if="props.vm.displayedIsEmpty">{{ props.vm.outboundPayload != undefined ?
-			$t('info.readyToReceive') : $t('info.readyToReceiveSend') }}</span>
+			$t('info.readyToSend') : $t('info.readyToReceive') }}</span>
 		<span v-else>{{ $t('info.nearbyDevices') }} </span>
 	</h3>
 

@@ -83,7 +83,7 @@ jobs:
           rsvg-convert -w 128 -h 128 "$svg" -o "$icons/128x128.png"
           rsvg-convert -w 256 -h 256 "$svg" -o "$icons/128x128@2x.png"
           rsvg-convert -w 512 -h 512 "$svg" -o "$icons/icon.png"
-          rsvg-convert -w 128 -h 128 "$svg" -o "$icons/tray.png"
+          rsvg-convert -w 512 -h 512 "$svg" -o "$icons/tray.png"
           python3 - <<'PY'
           import struct, zlib
           from pathlib import Path

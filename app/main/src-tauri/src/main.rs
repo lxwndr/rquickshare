@@ -92,8 +92,8 @@ async fn main() -> Result<(), anyhow::Error> {
             let name = MenuItemBuilder::new("RQuickShare")
                 .enabled(false)
                 .build(app)?;
-            let show = MenuItemBuilder::with_id("show", "Show").build(app)?;
-            let quit = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
+            let show = MenuItemBuilder::with_id("show", "Exibir").build(app)?;
+            let quit = MenuItemBuilder::with_id("quit", "Sair").build(app)?;
             let menu = MenuBuilder::new(app)
                 .item(&name)
                 .separator()

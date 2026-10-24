@@ -1,4 +1,5 @@
 name: Build Deepin 25 DEB
+# Rebuild trigger: validate the merged file-manager integration on Deepin 25.
 
 on:
   push:

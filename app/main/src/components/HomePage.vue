@@ -317,6 +317,18 @@ export default {
 				})
 			);
 
+			// Accept file selections forwarded by the dde-file-manager context menu.
+			this.unlisten.push(
+				await listen('send-files-requested', async (event) => {
+					const paths = event.payload as string[];
+					if (!Array.isArray(paths) || paths.length === 0) return;
+
+					this.outboundPayload = { Files: paths } as OutboundPayload;
+					if (!this.discoveryRunning) await invoke('start_discovery');
+					this.discoveryRunning = true;
+				})
+			);
+
 			this.unlisten.push(
 				await getCurrentWindow().onDragDropEvent(async (event) => {
 					if (event.payload.type === 'over') {
@@ -334,6 +346,14 @@ export default {
 					}
 				})
 			);
+
+			// If launched from the file manager as a new process, consume its paths.
+			const cliFiles = await invoke<string[]>('get_cli_files');
+			if (cliFiles.length > 0) {
+				this.outboundPayload = { Files: cliFiles } as OutboundPayload;
+				if (!this.discoveryRunning) await invoke('start_discovery');
+				this.discoveryRunning = true;
+			}
 
 			await this.getLatestVersion(this);
 		});

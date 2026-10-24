@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - ci/deepin-25-deb-build
+      - feat/deepin-file-manager-context-menu
   workflow_dispatch:
 
 permissions:
@@ -73,6 +74,28 @@ jobs:
         working-directory: app/main
         run: pnpm tauri build --bundles deb
 
+      - name: Add Deepin file-manager context menu
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          packages=(app/main/src-tauri/target/release/bundle/deb/*.deb)
+          if [ ${#packages[@]} -eq 0 ]; then
+            echo "No DEB package was produced."
+            exit 1
+          fi
+          for package in "${packages[@]}"; do
+            stage="$(mktemp -d)"
+            rebuilt="${package%.deb}.with-context-menu.deb"
+            dpkg-deb --extract "$package" "$stage"
+            dpkg-deb --control "$package" "$stage/DEBIAN"
+            install -D -m 0644 packaging/deepin/context-menus/rquickshare.conf \
+              "$stage/usr/etc/deepin/context-menus/rquickshare.conf"
+            dpkg-deb --build --root-owner-group "$stage" "$rebuilt"
+            mv "$rebuilt" "$package"
+            rm -rf "$stage"
+          done
+
       - name: Validate package
         shell: bash
         run: |
@@ -86,6 +109,7 @@ jobs:
           fi
           for package in "${packages[@]}"; do
             dpkg-deb --info "$package"
+            dpkg-deb --contents "$package" | grep -F 'usr/etc/deepin/context-menus/rquickshare.conf'
             file "$package"
           done
 

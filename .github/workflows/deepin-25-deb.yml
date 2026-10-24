@@ -77,9 +77,17 @@ jobs:
         run: |
           set -euo pipefail
           icons="app/main/src-tauri/icons"
-          svg="$icons/quickshare-mono.svg"
-          test -s "$svg"
-          rsvg-convert -w 512 -h 512 "$svg" -o "$icons/tray.png"
+          color_svg="$icons/quickshare-color.svg"
+          mono_svg="$icons/quickshare-mono.svg"
+          test -s "$color_svg"
+          test -s "$mono_svg"
+          # Keep the colored artwork for the app, launcher, and taskbar.
+          rsvg-convert -w 32 -h 32 "$color_svg" -o "$icons/32x32.png"
+          rsvg-convert -w 128 -h 128 "$color_svg" -o "$icons/128x128.png"
+          rsvg-convert -w 256 -h 256 "$color_svg" -o "$icons/128x128@2x.png"
+          rsvg-convert -w 512 -h 512 "$color_svg" -o "$icons/icon.png"
+          # The notification-area icon remains monochrome.
+          rsvg-convert -w 512 -h 512 "$mono_svg" -o "$icons/tray.png"
           python3 - <<'PY'
           import struct, zlib
           from pathlib import Path

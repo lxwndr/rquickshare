@@ -90,7 +90,7 @@ jobs:
           icons = Path("app/main/src-tauri/icons")
           for name in ("32x32.png", "128x128.png", "128x128@2x.png", "icon.png", "tray.png"):
               data = (icons / name).read_bytes()
-              assert data[:8] == b"\\x89PNG\\r\\n\\x1a\\n", f"{name}: invalid PNG signature"
+              assert data[:8] == b"\x89PNG\r\n\x1a\n", f"{name}: invalid PNG signature"
               pos = 8
               seen_end = False
               while pos < len(data):

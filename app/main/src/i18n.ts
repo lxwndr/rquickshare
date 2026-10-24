@@ -81,7 +81,7 @@ export const i18n = createI18n({
       info: {
         sending: 'Enviando...', receiving: 'Recebendo...', transferCancelled: 'Transferência cancelada',
         transferRejected: 'Transferência recusada', unexpectedDisconnection: 'Desconexão inesperada',
-        readyToReceive: 'Enviar', readyToReceiveSend: 'Enviar',
+        readyToReceive: 'Receber', readyToReceiveSend: 'Receber',
         nearbyDevices: 'Dispositivos próximos', dropFilesToSend: 'Solte arquivos aqui para enviar',
         copiedToClipboard: 'Copiado para a área de transferência',
         copyToClipboardError_unknown: 'Erro desconhecido ao copiar o texto',

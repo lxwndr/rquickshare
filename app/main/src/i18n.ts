@@ -75,13 +75,13 @@ export const i18n = createI18n({
         selectFileDestination: 'Selecione a pasta de destino dos arquivos', startOnBoot: 'Iniciar com o sistema',
         runningOnClose: 'Continuar em execução ao fechar', startMinimized: 'Iniciar minimizado', theme: 'Aparência', themeSystem: 'Seguir o sistema', themeLight: 'Claro', themeDark: 'Escuro',
         selectDownloadFolder: 'Alterar pasta de downloads', usersFolder: 'Pasta de downloads do usuário',
-        visibilityState: 'Estado de visibilidade', alwaysVisible: 'Sempre visível',
+        visibilityState: 'Visibilidade', alwaysVisible: 'Sempre visível',
         alwaysHidden: 'Oculto para todos', tempVisible: 'Visível temporariamente'
       },
       info: {
         sending: 'Enviando...', receiving: 'Recebendo...', transferCancelled: 'Transferência cancelada',
         transferRejected: 'Transferência recusada', unexpectedDisconnection: 'Desconexão inesperada',
-        readyToReceive: 'Pronto para receber', readyToReceiveSend: 'Pronto para receber e enviar',
+        readyToReceive: 'Enviar', readyToReceiveSend: 'Enviar',
         nearbyDevices: 'Dispositivos próximos', dropFilesToSend: 'Solte arquivos aqui para enviar',
         copiedToClipboard: 'Copiado para a área de transferência',
         copyToClipboardError_unknown: 'Erro desconhecido ao copiar o texto',

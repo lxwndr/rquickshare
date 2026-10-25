@@ -88,13 +88,16 @@ jobs:
           rsvg-convert -w 256 -h 256 "$color_svg" -o "$icons/256x256.png"
           rsvg-convert -w 512 -h 512 "$color_svg" -o "$icons/512x512.png"
           rsvg-convert -w 1024 -h 1024 "$color_svg" -o "$icons/icon.png"
-          # The notification-area icon remains monochrome; the desktop scales it to its slot.
-          rsvg-convert -w 1024 -h 1024 "$mono_svg" -o "$icons/tray.png"
+          # Generate black and white transparent tray variants from the supplied monochrome artwork.
+          rsvg-convert -w 256 -h 256 "$mono_svg" -o "$icons/tray-dark.png"
+          sed 's/#000000/#ffffff/g; s/#000/#fff/g' "$mono_svg" > "$icons/.quickshare-mono-light.svg"
+          rsvg-convert -w 256 -h 256 "$icons/.quickshare-mono-light.svg" -o "$icons/tray-light.png"
+          rm "$icons/.quickshare-mono-light.svg"
           python3 - <<'PY'
           import struct, zlib
           from pathlib import Path
           icons = Path("app/main/src-tauri/icons")
-          for name in ("32x32.png", "128x128.png", "128x128@2x.png", "256x256.png", "512x512.png", "icon.png", "tray.png"):
+          for name in ("32x32.png", "128x128.png", "128x128@2x.png", "256x256.png", "512x512.png", "icon.png", "tray-dark.png", "tray-light.png"):
               data = (icons / name).read_bytes()
               assert data[:8] == b"\x89PNG\r\n\x1a\n", f"{name}: invalid PNG signature"
               pos = 8

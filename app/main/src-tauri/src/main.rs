@@ -6,6 +6,7 @@
 #[macro_use]
 extern crate log;
 
+use std::process::Command;
 use std::sync::{Arc, Mutex};
 
 use rqs_lib::channel::{ChannelDirection, ChannelMessage};
@@ -100,7 +101,7 @@ async fn main() -> Result<(), anyhow::Error> {
                 .build()?;
 
             // Use the dedicated high-resolution tray icon on every platform.
-            let icon = Image::from_bytes(include_bytes!("../icons/tray.png")).unwrap();
+            let icon = tray_icon_for_current_theme();
 
             let tray = TrayIconBuilder::new()
                 .icon(icon)
@@ -120,6 +121,22 @@ async fn main() -> Result<(), anyhow::Error> {
 
             #[cfg(target_os = "macos")]
             let _ = tray.set_icon_as_template(true);
+
+            // Follow desktop theme changes without restarting the application.
+            let tray_for_theme = tray.clone();
+            tauri::async_runtime::spawn(async move {
+                let mut last_dark = is_dark_desktop_theme();
+                loop {
+                    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+                    let dark = is_dark_desktop_theme();
+                    if dark != last_dark {
+                        if let Err(error) = tray_for_theme.set_icon(Some(tray_icon_for_theme(dark))) {
+                            warn!("Could not update tray icon for desktop theme: {error}");
+                        }
+                        last_dark = dark;
+                    }
+                }
+            });
 
             let visibility = get_visibility(app.app_handle());
             let port_number = get_port(app.app_handle());
@@ -174,6 +191,42 @@ async fn main() -> Result<(), anyhow::Error> {
 
     info!("Application stopped");
     Ok(())
+}
+
+
+fn is_dark_desktop_theme() -> bool {
+    if let Ok(output) = Command::new("gsettings")
+        .args(["get", "org.gnome.desktop.interface", "color-scheme"])
+        .output()
+    {
+        let value = String::from_utf8_lossy(&output.stdout).to_lowercase();
+        if output.status.success() && value.contains("prefer-dark") { return true; }
+        if output.status.success() && value.contains("prefer-light") { return false; }
+    }
+    if let Ok(output) = Command::new("gsettings")
+        .args(["get", "org.gnome.desktop.interface", "gtk-theme"])
+        .output()
+    {
+        if output.status.success() {
+            return String::from_utf8_lossy(&output.stdout).to_lowercase().contains("dark");
+        }
+    }
+    std::env::var("GTK_THEME")
+        .map(|theme| theme.to_lowercase().contains("dark"))
+        .unwrap_or(false)
+}
+
+fn tray_icon_for_theme(dark_theme: bool) -> Image<'static> {
+    let bytes: &'static [u8] = if dark_theme {
+        include_bytes!("../icons/tray-light.png")
+    } else {
+        include_bytes!("../icons/tray-dark.png")
+    };
+    Image::from_bytes(bytes).expect("generated tray icon must be a valid PNG")
+}
+
+fn tray_icon_for_current_theme() -> Image<'static> {
+    tray_icon_for_theme(is_dark_desktop_theme())
 }
 
 fn spawn_receiver_tasks(app_handle: &AppHandle) {

@@ -211,7 +211,10 @@ fn is_dark_desktop_theme() -> bool {
         };
 
         for line in String::from_utf8_lossy(&output.stdout).lines() {
-            let Some((key, value)) = line.split_once(' ') else {
+            let mut parts = line.splitn(3, ' ');
+            let (_schema, Some(key), Some(value)) =
+                (parts.next(), parts.next(), parts.next())
+            else {
                 continue;
             };
             let key = key.to_lowercase();

@@ -96,26 +96,6 @@ jobs:
           rsvg-convert -w 256 -h 256 "$icons/.quickshare-mono-light.svg" -o "$icons/tray-light.png"
           rm "$icons/.quickshare-mono-dark.svg" "$icons/.quickshare-mono-light.svg"
           python3 - <<'PY'
-          from pathlib import Path
-          import struct, zlib
-          icons = Path("app/main/src-tauri/icons")
-          def colors(path):
-              data = path.read_bytes()
-              pos = 8
-              found = set()
-              while pos + 12 <= len(data):
-                  size = struct.unpack(">I", data[pos:pos+4])[0]
-                  kind = data[pos+4:pos+8]
-                  chunk = data[pos+8:pos+8+size]
-                  if kind == b"IDAT":
-                      found.add("idat")
-                  pos += size + 12
-                  if kind == b"IEND":
-                      break
-              return data
-          assert b"currentColor" not in Path("$mono_svg").read_bytes(), "unexpected source"
-          PY
-          python3 - <<'PY'
           import struct, zlib
           from pathlib import Path
           icons = Path("app/main/src-tauri/icons")

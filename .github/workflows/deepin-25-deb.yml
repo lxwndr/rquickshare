@@ -138,6 +138,15 @@ jobs:
             rebuilt="${package%.deb}.with-context-menu.deb"
             dpkg-deb --extract "$package" "$stage"
             dpkg-deb --control "$package" "$stage/DEBIAN"
+            # Install the original vector artwork as a scalable desktop icon.
+            install -D -m 0644 app/main/src-tauri/icons/quickshare-color.svg \
+              "$stage/usr/share/icons/hicolor/scalable/apps/dev.mandre.rquickshare.svg"
+            install -D -m 0644 app/main/src-tauri/icons/quickshare-color.svg \
+              "$stage/usr/share/icons/hicolor/scalable/apps/rquickshare.svg"
+            # Ensure the desktop launcher resolves to the installed scalable icon.
+            while IFS= read -r -d '' desktop_file; do
+              sed -i 's/^Icon=.*/Icon=dev.mandre.rquickshare/' "$desktop_file"
+            done < <(find "$stage/usr/share/applications" -type f -name '*.desktop' -print0 2>/dev/null || true)
             install -D -m 0644 packaging/deepin/context-menus/rquickshare.conf \
               "$stage/usr/etc/deepin/context-menus/rquickshare.conf"
             dpkg-deb --build --root-owner-group "$stage" "$rebuilt"

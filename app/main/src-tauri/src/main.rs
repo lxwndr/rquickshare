@@ -195,22 +195,33 @@ async fn main() -> Result<(), anyhow::Error> {
 
 
 fn is_dark_desktop_theme() -> bool {
-    if let Ok(output) = Command::new("gsettings")
-        .args(["get", "org.gnome.desktop.interface", "color-scheme"])
-        .output()
-    {
+    // Deepin 25 uses its own appearance settings; GNOME's color-scheme key
+    // is not necessarily updated when the user changes the Deepin theme.
+    let settings = [
+        ("com.deepin.dde.appearance", "gtk-theme"),
+        ("com.deepin.dde.appearance", "theme"),
+        ("org.gnome.desktop.interface", "color-scheme"),
+        ("org.gnome.desktop.interface", "gtk-theme"),
+    ];
+
+    for (schema, key) in settings {
+        let output = match Command::new("gsettings")
+            .args(["get", schema, key])
+            .output()
+        {
+            Ok(output) if output.status.success() => output,
+            _ => continue,
+        };
         let value = String::from_utf8_lossy(&output.stdout).to_lowercase();
-        if output.status.success() && value.contains("prefer-dark") { return true; }
-        if output.status.success() && value.contains("prefer-light") { return false; }
-    }
-    if let Ok(output) = Command::new("gsettings")
-        .args(["get", "org.gnome.desktop.interface", "gtk-theme"])
-        .output()
-    {
-        if output.status.success() {
-            return String::from_utf8_lossy(&output.stdout).to_lowercase().contains("dark");
+        if value.contains("dark") || value.contains("prefer-dark") {
+            return true;
+        }
+        if value.contains("light") || value.contains("prefer-light") {
+            return false;
         }
     }
+
+    // GTK_THEME is commonly set by launchers and is a useful fallback.
     std::env::var("GTK_THEME")
         .map(|theme| theme.to_lowercase().contains("dark"))
         .unwrap_or(false)

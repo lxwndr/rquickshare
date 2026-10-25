@@ -195,33 +195,54 @@ async fn main() -> Result<(), anyhow::Error> {
 
 
 fn is_dark_desktop_theme() -> bool {
-    // Deepin 25 uses its own appearance settings; GNOME's color-scheme key
-    // is not necessarily updated when the user changes the Deepin theme.
-    let settings = [
-        ("com.deepin.dde.appearance", "gtk-theme"),
-        ("com.deepin.dde.appearance", "theme"),
-        ("org.gnome.desktop.interface", "color-scheme"),
-        ("org.gnome.desktop.interface", "gtk-theme"),
-    ];
-
-    for (schema, key) in settings {
+    // Deepin's appearance schema differs between releases. Inspect its
+    // available settings instead of assuming a particular key exists.
+    for schema in [
+        "com.deepin.dde.appearance",
+        "com.deepin.dde.daemon.Appearance",
+        "org.gnome.desktop.interface",
+    ] {
         let output = match Command::new("gsettings")
-            .args(["get", schema, key])
+            .args(["list-recursively", schema])
             .output()
         {
             Ok(output) if output.status.success() => output,
             _ => continue,
         };
-        let value = String::from_utf8_lossy(&output.stdout).to_lowercase();
-        if value.contains("dark") || value.contains("prefer-dark") {
-            return true;
-        }
-        if value.contains("light") || value.contains("prefer-light") {
-            return false;
+
+        for line in String::from_utf8_lossy(&output.stdout).lines() {
+            let Some((key, value)) = line.split_once(' ') else {
+                continue;
+            };
+            let key = key.to_lowercase();
+            let value = value.to_lowercase();
+
+            // Ignore unrelated settings; only use values that describe the
+            // selected appearance or GTK theme.
+            if !(key.contains("theme")
+                || key.contains("color-scheme")
+                || key.contains("appearance")
+                || key.contains("dark-mode"))
+            {
+                continue;
+            }
+
+            if value.contains("prefer-dark")
+                || value.contains("dark")
+                || value == "true"
+            {
+                return true;
+            }
+            if value.contains("prefer-light")
+                || value.contains("light")
+                || value == "false"
+            {
+                return false;
+            }
         }
     }
 
-    // GTK_THEME is commonly set by launchers and is a useful fallback.
+    // GTK_THEME is commonly set by launchers and remains a useful fallback.
     std::env::var("GTK_THEME")
         .map(|theme| theme.to_lowercase().contains("dark"))
         .unwrap_or(false)

@@ -6,7 +6,6 @@
 #[macro_use]
 extern crate log;
 
-use std::process::Command;
 use std::sync::{Arc, Mutex};
 
 use rqs_lib::channel::{ChannelDirection, ChannelMessage};
@@ -16,7 +15,7 @@ use tauri::image::Image;
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::TrayIconBuilder,
-    AppHandle, Emitter, Manager, Window, WindowEvent,
+    AppHandle, Emitter, Listener, Manager, Window, WindowEvent,
 };
 use tauri_plugin_autostart::MacosLauncher;
 use tokio::sync::{broadcast, mpsc, watch};
@@ -122,19 +121,12 @@ async fn main() -> Result<(), anyhow::Error> {
             #[cfg(target_os = "macos")]
             let _ = tray.set_icon_as_template(true);
 
-            // Follow desktop theme changes without restarting the application.
+            // Follow the theme actually applied by the frontend, not the desktop theme.
             let tray_for_theme = tray.clone();
-            tauri::async_runtime::spawn(async move {
-                let mut last_dark = is_dark_desktop_theme();
-                loop {
-                    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
-                    let dark = is_dark_desktop_theme();
-                    if dark != last_dark {
-                        if let Err(error) = tray_for_theme.set_icon(Some(tray_icon_for_theme(dark))) {
-                            warn!("Could not update tray icon for desktop theme: {error}");
-                        }
-                        last_dark = dark;
-                    }
+            app.listen("rquickshare-theme-changed", move |event| {
+                let dark = event.payload() == "true";
+                if let Err(error) = tray_for_theme.set_icon(Some(tray_icon_for_theme(dark))) {
+                    warn!("Could not update tray icon for app theme: {error}");
                 }
             });
 
@@ -193,63 +185,6 @@ async fn main() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
-
-fn is_dark_desktop_theme() -> bool {
-    // Deepin's appearance schema differs between releases. Inspect its
-    // available settings instead of assuming a particular key exists.
-    for schema in [
-        "com.deepin.dde.appearance",
-        "com.deepin.dde.daemon.Appearance",
-        "org.gnome.desktop.interface",
-    ] {
-        let output = match Command::new("gsettings")
-            .args(["list-recursively", schema])
-            .output()
-        {
-            Ok(output) if output.status.success() => output,
-            _ => continue,
-        };
-
-        for line in String::from_utf8_lossy(&output.stdout).lines() {
-            let mut parts = line.splitn(3, ' ');
-            let (_schema, Some(key), Some(value)) =
-                (parts.next(), parts.next(), parts.next())
-            else {
-                continue;
-            };
-            let key = key.to_lowercase();
-            let value = value.to_lowercase();
-
-            // Ignore unrelated settings; only use values that describe the
-            // selected appearance or GTK theme.
-            if !(key.contains("theme")
-                || key.contains("color-scheme")
-                || key.contains("appearance")
-                || key.contains("dark-mode"))
-            {
-                continue;
-            }
-
-            if value.contains("prefer-dark")
-                || value.contains("dark")
-                || value == "true"
-            {
-                return true;
-            }
-            if value.contains("prefer-light")
-                || value.contains("light")
-                || value == "false"
-            {
-                return false;
-            }
-        }
-    }
-
-    // GTK_THEME is commonly set by launchers and remains a useful fallback.
-    std::env::var("GTK_THEME")
-        .map(|theme| theme.to_lowercase().contains("dark"))
-        .unwrap_or(false)
-}
 
 fn tray_icon_for_theme(dark_theme: bool) -> Image<'static> {
     let bytes: &'static [u8] = if dark_theme {

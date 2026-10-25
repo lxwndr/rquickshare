@@ -1,3 +1,5 @@
+import { emit } from '@tauri-apps/api/event'
+
 import { ref, watch } from 'vue'
 
 export type ThemePreference = 'system' | 'light' | 'dark'
@@ -18,6 +20,11 @@ function applyTheme(): void {
 
   document.documentElement.classList.toggle('dark', isDark)
   document.documentElement.style.colorScheme = isDark ? 'dark' : 'light'
+
+  // Keep the native system-tray icon synchronized with the app's real theme.
+  void emit('rquickshare-theme-changed', isDark).catch((error) => {
+    console.warn('Could not synchronize the tray icon theme:', error)
+  })
 }
 
 export function setThemePreference(preference: ThemePreference): void {

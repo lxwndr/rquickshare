@@ -5,6 +5,12 @@
 <path d="M37.437 111.354c3.983-.356 7.45 2.46 7.854 6.374.12 1.199.276 2.39.462 3.565 5.071 32.131 32.514 55.444 65.249 55.444 27.551 0 51.737-16.761 61.51-41.683h-43.509l3.545 3.528a6.316 6.316 0 0 1 0 8.961 6.385 6.385 0 0 1-8.999 0l-15.174-15.101a6.316 6.316 0 0 1 0-8.961l15.171-15.099a6.39 6.39 0 0 1 9.004 0 6.313 6.313 0 0 1 0 8.957l-3.468 3.452h52.628c2.195 0 4.593 1.168 5.949 2.885 1.364 1.725 1.931 4.324 1.407 6.458C180.225 165.97 148.124 191 111.002 191c-39.835 0-73.226-28.387-79.401-67.494a83.856 83.856 0 0 1-.564-4.34c-.4-3.913 2.468-7.41 6.4-7.812Z" fill="#FFFFFF"/>
 </g>
 <defs>
-<clipPath id="aa"><path fill="#fff" d="M31 31h160v160H31z"/></clipPath>
-<radialGradient id="a" cx="-.016%" cy="6.377%" r="169.834%" fx="-.016%" fy="6.377%" gradientTransform="matrix(.6872 0 0 1 0 0)"><stop offset="0%" stop-color="#262626" stop-opacity=".2"/><stop offset="100%" stop-color="#262626" stop-opacity="0"/></radialGradient></defs>
-</symbol></defs><title id="ico-beto-download-title">Quick Share Logo</title><use xlink:href="#ico-beto-download" fill="#404040"/></svg>
+<clipPath id="aa">
+<path fill="#fff" d="M31 31h160v160H31z"/>
+</clipPath>
+<radialGradient id="a" cx="-.016%" cy="6.377%" r="169.834%" fx="-.016%" fy="6.377%" gradientTransform="matrix(.6872 0 0 1 0 0)">
+      <stop offset="0%" stop-color="#262626" stop-opacity=".2"/>
+      <stop offset="100%" stop-color="#262626" stop-opacity="0"/>
+    </radialGradient></defs>
+</symbol></defs>      <title id="ico-beto-download-title">Quick Share Logo</title>    <use xlink:href="#ico-beto-download" fill="#404040"/>
+  </svg>

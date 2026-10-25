@@ -100,7 +100,7 @@ async fn main() -> Result<(), anyhow::Error> {
                 .build()?;
 
             // Use the dedicated high-resolution tray icon on every platform.
-            let icon = tray_icon_for_current_theme();
+            let icon = tray_icon_for_theme(false);
 
             let tray = TrayIconBuilder::new()
                 .icon(icon)
@@ -195,9 +195,6 @@ fn tray_icon_for_theme(dark_theme: bool) -> Image<'static> {
     Image::from_bytes(bytes).expect("generated tray icon must be a valid PNG")
 }
 
-fn tray_icon_for_current_theme() -> Image<'static> {
-    tray_icon_for_theme(is_dark_desktop_theme())
-}
 
 fn spawn_receiver_tasks(app_handle: &AppHandle) {
     let capp_handle = app_handle.clone();

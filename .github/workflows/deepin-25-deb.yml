@@ -88,11 +88,33 @@ jobs:
           rsvg-convert -w 256 -h 256 "$color_svg" -o "$icons/256x256.png"
           rsvg-convert -w 512 -h 512 "$color_svg" -o "$icons/512x512.png"
           rsvg-convert -w 1024 -h 1024 "$color_svg" -o "$icons/icon.png"
-          # Generate black and white transparent tray variants from the supplied monochrome artwork.
-          rsvg-convert -w 256 -h 256 "$mono_svg" -o "$icons/tray-dark.png"
-          sed 's/#000000/#ffffff/g; s/#000/#fff/g' "$mono_svg" > "$icons/.quickshare-mono-light.svg"
+          # currentColor has no guaranteed color when rasterized by rsvg-convert.
+          # Set explicit fills so the dark-theme icon is actually white.
+          sed 's/fill="currentColor"/fill="#000000"/g' "$mono_svg" > "$icons/.quickshare-mono-dark.svg"
+          sed 's/fill="currentColor"/fill="#ffffff"/g' "$mono_svg" > "$icons/.quickshare-mono-light.svg"
+          rsvg-convert -w 256 -h 256 "$icons/.quickshare-mono-dark.svg" -o "$icons/tray-dark.png"
           rsvg-convert -w 256 -h 256 "$icons/.quickshare-mono-light.svg" -o "$icons/tray-light.png"
-          rm "$icons/.quickshare-mono-light.svg"
+          rm "$icons/.quickshare-mono-dark.svg" "$icons/.quickshare-mono-light.svg"
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct, zlib
+          icons = Path("app/main/src-tauri/icons")
+          def colors(path):
+              data = path.read_bytes()
+              pos = 8
+              found = set()
+              while pos + 12 <= len(data):
+                  size = struct.unpack(">I", data[pos:pos+4])[0]
+                  kind = data[pos+4:pos+8]
+                  chunk = data[pos+8:pos+8+size]
+                  if kind == b"IDAT":
+                      found.add("idat")
+                  pos += size + 12
+                  if kind == b"IEND":
+                      break
+              return data
+          assert b"currentColor" not in Path("$mono_svg").read_bytes(), "unexpected source"
+          PY
           python3 - <<'PY'
           import struct, zlib
           from pathlib import Path

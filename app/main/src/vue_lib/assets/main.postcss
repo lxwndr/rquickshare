@@ -288,6 +288,15 @@ body,
     background-image: linear-gradient(-45deg, transparent 65%, #166534 65.99%), linear-gradient(45deg, transparent 75%, #166534 75.99%), linear-gradient(-45deg, #166534 40%, transparent 40.99%), linear-gradient(45deg, #166534 30%, #f9fafb 30.99%, #f9fafb 40%, transparent 40.99%), linear-gradient(-45deg, #f9fafb 50%, #166534 50.99%);
 }
 
+/* Keep sidebar visibility icons aligned with their text in both themes. */
+.w-72 > h4 svg {
+    color: inherit;
+}
+
+.w-72 > h4 svg path {
+    fill: currentColor;
+}
+
 /* Improve contrast and keep monochrome icons visible in dark mode. */
 .dark {
     color-scheme: dark;
@@ -365,4 +374,3 @@ body,
 .dark .status-indicator--success .circle-tertiary {
     background: rgba(74, 222, 128, 0.5);
 }
-
